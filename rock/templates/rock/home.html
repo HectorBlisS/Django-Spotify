@@ -1,0 +1,103 @@
+<!DOTYPE html>
+{%load static%}
+<html>
+	<head>
+		<title>BlisS</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="{%static 'css/skeleton.css'%}">
+
+		<style>
+			section{
+				text-align: center;
+
+			}
+			h1{
+				padding-top: 6rem;
+			}
+		</style>
+	</head>
+	
+	<body>
+
+	<section class="container">
+
+	<h1 class="center">SpotyBlisS</h1>
+	<button class="button-primary" onClick="login()">Que comienze el desvergue</button>
+	<br>
+	<span id="token"></span>
+
+
+	</section>
+
+
+
+	<script   src="https://code.jquery.com/jquery-3.0.0.min.js"   integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0="   crossorigin="anonymous"></script>
+	<script>
+
+
+
+
+
+
+    function login(callback) {
+    	// ESTO ES LO UNICO QUE TIENES QUE CAMBIAR 
+        var CLIENT_ID = '898c54a73cb7447792d703c0024e39f4';
+        // ESTO ES LO UNICO QUE TIENES QUE CAMBIAR ^^
+        var REDIRECT_URI = 'http://localhost:8000/callback';
+        function getLoginURL(scopes) {
+            return 'https://accounts.spotify.com/authorize?client_id=' + CLIENT_ID +
+              '&redirect_uri=' + encodeURIComponent(REDIRECT_URI) +
+              '&scope=' + encodeURIComponent(scopes.join(' ')) +
+              '&response_type=token';
+        }
+        
+        var url = getLoginURL([
+            'user-read-email'
+        ]);
+        
+        var width = 450,
+            height = 730,
+            left = (screen.width / 2) - (width / 2),
+            top = (screen.height / 2) - (height / 2);
+    
+        window.addEventListener("message", function(event) {
+        	console.log(event);
+            var hash = JSON.parse(event.data);
+            if (hash.type == 'access_token') {
+                getUserData(hash.access_token);
+            }
+        }, false);
+        
+        var w = window.open(url,
+                            'Spotify',
+                            'menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left
+                           );
+        
+    }
+
+    function getUserData(accessToken) {
+        return $.ajax({
+            url: 'https://api.spotify.com/v1/me',
+            headers: {
+               'Authorization': 'Bearer ' + accessToken
+            },
+            success:function(response){
+            	console.log('token: '+accessToken);
+            	$('#token').html(accessToken);
+            }
+        });
+    }
+
+
+
+
+
+    
+
+
+
+    
+
+	</script>
+	</body>
+</html>
