@@ -22,6 +22,7 @@
 	<section class="container">
 
 	<h1 id="nombre" class="center">SpotyBlisS</h1>
+	<img style="display:none;"id="load" src="{%static 'load.gif'%}">
 	<img id="imagen"src="">
 	<br>
 	<button class="button-primary" onClick="login()">Que comienze el desvergue</button>
@@ -83,6 +84,8 @@
             headers: {
                'Authorization': 'Bearer ' + accessToken
             },
+            beforeSend:function(){$('#load').slideToggle()},
+            complete:function(){$('#load').slideToggle()},
             success:function(response){
             	console.log(response);
             	$('#imagen').attr('src',response.images[0].url);
