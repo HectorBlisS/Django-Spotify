@@ -21,7 +21,9 @@
 
 	<section class="container">
 
-	<h1 class="center">SpotyBlisS</h1>
+	<h1 id="nombre" class="center">SpotyBlisS</h1>
+	<img id="imagen"src="">
+	<br>
 	<button class="button-primary" onClick="login()">Que comienze el desvergue</button>
 	<br>
 	<span id="token"></span>
@@ -82,8 +84,11 @@
                'Authorization': 'Bearer ' + accessToken
             },
             success:function(response){
-            	console.log('token: '+accessToken);
+            	console.log(response);
+            	$('#imagen').attr('src',response.images[0].url);
+            	$('#nombre').html(response.display_name);
             	$('#token').html(accessToken);
+
             }
         });
     }
